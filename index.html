@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Manager Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Using a common icon library for aesthetic UI elements (like Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">Your Life Hub</h1>
+        <div class="header-info">
+            <span id="current-date" class="date-display"></span>
+            <span id="current-time" class="time-display"></span>
+            <button id="toggle-history-btn" class="history-toggle-btn" title="View History">
+                <i class="fas fa-history"></i> History
+            </button>
+        </div>
+    </header>
+
+    <!-- Activity History Panel (Initially Hidden) -->
+    <section id="history-section" class="history-section hidden">
+        <div class="history-header">
+            <h2 class="widget-title"><i class="fas fa-clock-rotate-left"></i> Activity History</h2>
+            <button id="close-history-btn" class="close-btn">&times;</button>
+        </div>
+        <ul id="history-list" class="history-list">
+            <!-- History items will be dynamically added here -->
+        </ul>
+    </section>
+
+    <main class="dashboard-grid">
+        <!-- Motivational Quote Widget -->
+        <section class="widget motivational-quote-widget">
+            <h2 class="widget-title"><i class="fas fa-lightbulb"></i> Daily Inspiration</h2>
+            <p id="quote-text" class="quote-text">Loading wisdom...</p>
+            <p id="quote-author" class="quote-author">- Unknown</p>
+            <button id="refresh-quote-btn" class="refresh-btn"><i class="fas fa-redo-alt"></i> New Quote</button>
+        </section>
+
+        <!-- Task Planner Widget -->
+        <section class="widget task-planner-widget">
+            <h2 class="widget-title"><i class="fas fa-tasks"></i> My Tasks</h2>
+            <form id="task-form" class="add-item-form">
+                <input type="text" id="new-task-input" placeholder="What needs to be done?" required>
+                <input type="text" id="new-task-desc" placeholder="Task description (optional)">
+                <div class="form-row">
+                    <input type="date" id="new-task-date">
+                    <button type="submit" class="submit-btn"><i class="fas fa-plus"></i> Add Task</button>
+                </div>
+            </form>
+            <ul id="task-list" class="item-list">
+                <!-- Task items will be dynamically added here by JavaScript -->
+            </ul>
+        </section>
+
+        <!-- Habit Tracker Widget -->
+        <section class="widget habit-tracker-widget">
+            <h2 class="widget-title"><i class="fas fa-check-double"></i> Good Habits</h2>
+            <form id="habit-form" class="add-item-form">
+                <input type="text" id="new-habit-input" placeholder="Add a new habit..." required>
+                <button type="submit"><i class="fas fa-plus"></i></button>
+            </form>
+            <ul id="habit-list" class="item-list">
+                <!-- Habit items will be dynamically added here -->
+            </ul>
+        </section>
+
+        <!-- Expense Tracker Widget -->
+        <section class="widget expense-tracker-widget">
+            <h2 class="widget-title"><i class="fas fa-wallet"></i> My Wallet</h2>
+            <div class="balance-display">
+                Current Balance: <span id="current-balance">$0.00</span>
+            </div>
+            <form id="expense-form" class="add-item-form expense-form">
+                <input type="text" id="expense-description-input" placeholder="Description" required>
+                <input type="number" id="expense-amount-input" placeholder="Amount" step="0.01" required>
+                <select id="expense-type-select">
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+                </select>
+                <button type="submit"><i class="fas fa-plus"></i></button>
+            </form>
+            <ul id="expense-list" class="item-list">
+                <!-- Expense items will be dynamically added here -->
+            </ul>
+        </section>
+
+        <!-- Event Countdown Widget -->
+        <section class="widget event-countdown-widget">
+            <h2 class="widget-title"><i class="fas fa-calendar-alt"></i> Upcoming Events</h2>
+            <form id="event-form" class="add-item-form">
+                <input type="text" id="new-event-name-input" placeholder="Event name" required>
+                <input type="datetime-local" id="new-event-date-input" required title="Set event date and time">
+                <button type="submit"><i class="fas fa-plus"></i></button>
+            </form>
+            <ul id="event-list" class="item-list">
+                <!-- Event items will be dynamically added here -->
+            </ul>
+        </section>
+    <!-- Alarm Overlay -->
+    <section id="alarm-overlay" class="alarm-overlay hidden">
+        <div class="alarm-content">
+            <div class="alarm-icon"><i class="fas fa-bell"></i></div>
+            <h2>EVENT ALARM!</h2>
+            <p id="alarm-event-name">Something is happening now!</p>
+            <button type="button" id="stop-alarm-btn" class="stop-alarm-btn">STOP ALARM</button>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+
+    <script src="modules/dataManager.js"></script>
+    <script src="modules/api.js"></script>
+    <script src="modules/historyModule.js"></script>
+    <script src="modules/taskModule.js"></script>
+    <script src="modules/habitModule.js"></script>
+    <script src="modules/expenseModule.js"></script>
+    <script src="modules/eventModule.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
