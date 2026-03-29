@@ -436,15 +436,15 @@ body {
     padding: 40px;
     border-radius: var(--border-radius);
     text-align: center;
-    border: 3px solid #ff4757;
-    box-shadow: 0 0 50px rgba(255, 71, 87, 0.5);
+    border: 3px solid var(--accent-color);
+    box-shadow: 0 0 50px rgba(108, 92, 231, 0.5);
     max-width: 400px;
     width: 90%;
 }
 
 .alarm-icon {
     font-size: 4rem;
-    color: #ff4757;
+    color: var(--accent-color);
     margin-bottom: 20px;
     animation: bellShake 0.5s infinite alternate;
 }
@@ -463,7 +463,7 @@ body {
 }
 
 .stop-alarm-btn {
-    background-color: #ff4757;
+    background-color: var(--accent-color);
     color: white;
     font-size: 1.5rem;
     font-weight: bold;
@@ -476,12 +476,12 @@ body {
 
 .stop-alarm-btn:hover {
     transform: scale(1.1);
-    background-color: #ff6b81;
+    background-color: #a29bfe;
 }
 
 @keyframes alarmPulse {
     0% { background-color: rgba(18, 18, 18, 0.95); }
-    50% { background-color: rgba(255, 71, 87, 0.4); }
+    50% { background-color: rgba(108, 92, 231, 0.3); }
     100% { background-color: rgba(18, 18, 18, 0.95); }
 }
 

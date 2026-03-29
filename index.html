@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <!-- Using a common icon library for aesthetic UI elements (like Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <header class="dashboard-header">
         <h1 class="dashboard-title">Your Life Hub</h1>
@@ -100,25 +102,26 @@
                 <!-- Event items will be dynamically added here -->
             </ul>
         </section>
-    <!-- Alarm Overlay -->
-    <section id="alarm-overlay" class="alarm-overlay hidden">
-        <div class="alarm-content">
-            <div class="alarm-icon"><i class="fas fa-bell"></i></div>
-            <h2>EVENT ALARM!</h2>
-            <p id="alarm-event-name">Something is happening now!</p>
-            <button type="button" id="stop-alarm-btn" class="stop-alarm-btn">STOP ALARM</button>
-        </div>
-    </section>
+        <!-- Alarm Overlay -->
+        <section id="alarm-overlay" class="alarm-overlay hidden">
+            <div class="alarm-content">
+                <div class="alarm-icon"><i class="fas fa-bell"></i></div>
+                <h2>EVENT ALARM!</h2>
+                <p id="alarm-event-name">Something is happening now!</p>
+                <button type="button" id="stop-alarm-btn" class="stop-alarm-btn">STOP ALARM</button>
+            </div>
+        </section>
 
-    <!-- Scripts -->
+        <!-- Scripts -->
 
-    <script src="modules/dataManager.js"></script>
-    <script src="modules/api.js"></script>
-    <script src="modules/historyModule.js"></script>
-    <script src="modules/taskModule.js"></script>
-    <script src="modules/habitModule.js"></script>
-    <script src="modules/expenseModule.js"></script>
-    <script src="modules/eventModule.js"></script>
-    <script src="script.js"></script>
+        <script src="modules/dataManager.js"></script>
+        <script src="modules/api.js"></script>
+        <script src="modules/historyModule.js"></script>
+        <script src="modules/taskModule.js"></script>
+        <script src="modules/habitModule.js"></script>
+        <script src="modules/expenseModule.js"></script>
+        <script src="modules/eventModule.js"></script>
+        <script src="script.js"></script>
 </body>
+
 </html>

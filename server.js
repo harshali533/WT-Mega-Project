@@ -24,12 +24,12 @@ http.createServer((req, res) => {
 
     fs.readFile(filePath, (error, content) => {
         if (error) {
-            if(error.code == 'ENOENT'){
+            if (error.code == 'ENOENT') {
                 res.writeHead(404);
                 res.end('File not found', 'utf-8');
             } else {
                 res.writeHead(500);
-                res.end('Sorry, check with the site admin for error: '+error.code+' ..\n');
+                res.end('Sorry, check with the site admin for error: ' + error.code + ' ..\n');
             }
         } else {
             res.writeHead(200, { 'Content-Type': contentType });

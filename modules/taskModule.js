@@ -53,9 +53,9 @@ function addTask(text, description, dueDate) {
     tasks.push(newTask);
     saveData('tasks', tasks);
     renderTasks();
-    
+
     addHistoryItem('Created Task', `Added "${text}"`);
-    
+
     // Set 5-hour reminder (5 * 60 * 60 * 1000 ms)
     scheduleReminder(newTask);
 }
@@ -65,7 +65,7 @@ function addTask(text, description, dueDate) {
  */
 function scheduleReminder(task) {
     if (!task || !task.createdAt) return; // Skip legacy tasks without createdAt
-    
+
     const fiveHoursInMs = 5 * 60 * 60 * 1000;
     const timeSinceCreation = Date.now() - task.createdAt;
     const delay = Math.max(0, fiveHoursInMs - timeSinceCreation);
@@ -122,7 +122,7 @@ function toggleTaskComplete(id) {
         tasks[taskIndex].completed = isNowCompleted;
         saveData('tasks', tasks);
         renderTasks();
-        
+
         const action = isNowCompleted ? 'Completed Task' : 'Reopened Task';
         addHistoryItem(action, `"${tasks[taskIndex].text}" is now ${isNowCompleted ? 'Completed ✔️' : 'Pending ❌'}`);
     }
@@ -150,7 +150,7 @@ function setupTaskListeners() {
             const taskText = newTaskInput.value.trim();
             const taskDesc = newTaskDescInput.value.trim();
             const taskDate = newTaskDateInput.value;
-            
+
             if (taskText) {
                 addTask(taskText, taskDesc, taskDate);
                 taskForm.reset();
@@ -194,7 +194,7 @@ function initTasks(loadedTasks) {
             tasks = loadedTasks;
         }
         renderTasks();
-        
+
         // Check for reminders on startup for incomplete tasks
         tasks.forEach(task => {
             if (!task.completed) {
@@ -209,6 +209,6 @@ function initTasks(loadedTasks) {
     } catch (error) {
         console.error("Error initializing Task Module:", error);
     }
-    
+
     console.log("Task Module initialized.");
 }

@@ -7,9 +7,65 @@ let events = []; // Array to hold event objects
 let countdownInterval; // To store the interval for updating countdowns
 let notifiedEvents = new Set(); // To prevent duplicate notifications for already passed events in current session
 
-// Alarm Audio - Using a standard beep sound URL
-const alarmSound = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
-alarmSound.loop = true;
+// Alarm System Setup - Web Audio API for highly reliable sound
+let audioCtx;
+let alarmInterval;
+
+/**
+ * Initializes the AudioContext on first user interaction (required by many browsers)
+ */
+function initAudioContext() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+}
+
+/**
+ * Ensures the AudioContext is resumed.
+ */
+function resumeAudioContext() {
+    initAudioContext();
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
+/**
+ * Starts a repeating digital "Beep-Beep" alarm.
+ */
+function playDigitalAlarm() {
+    resumeAudioContext();
+    
+    if (alarmInterval) stopDigitalAlarm();
+
+    // Create a "Beep... Beep..." pattern
+    alarmInterval = setInterval(() => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'square'; // "Square" wave for that piercing digital beep
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime); // High pitched beep
+        
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime); // Volume
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15); // Quick fade
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+    }, 500); // Repeat every half second
+}
+
+/**
+ * Stops the repeating digital alarm.
+ */
+function stopDigitalAlarm() {
+    if (alarmInterval) {
+        clearInterval(alarmInterval);
+        alarmInterval = null;
+    }
+}
 
 /**
  * Initializes listeners for the alarm overlay.
@@ -19,6 +75,9 @@ function initAlarmListeners() {
     if (stopBtn) {
         stopBtn.addEventListener('click', stopAlarm);
     }
+    
+    // Unlock Audio Context on first click anywhere (satisfies browser autoplay policy)
+    document.addEventListener('click', resumeAudioContext, { once: true });
 }
 
 /**
@@ -27,33 +86,36 @@ function initAlarmListeners() {
 function triggerAlarm(event) {
     const overlay = document.getElementById('alarm-overlay');
     const nameDisplay = document.getElementById('alarm-event-name');
-    
+
     if (overlay && nameDisplay) {
         nameDisplay.textContent = event.name.toUpperCase();
         overlay.classList.remove('hidden');
-        
-        // Play sound (Modern browsers require user interaction first, 
-        // but since they probably clicked something on the dashboard, it should work)
-        alarmSound.play().catch(e => console.log("Audio play blocked until user interaction"));
-        
+
+        // Play the newly implemented digital beep
+        try {
+            playDigitalAlarm();
+        } catch (e) {
+            console.error("Audio failed to trigger:", e);
+        }
+
         // Also send a standard notification as backup
         sendNotification('EVENT ALARM!', `It's time for: ${event.name}`);
     }
 }
 
 /**
- * Stops the alarm sound and hides the overlay.
+ * Stops the alarm and hides the overlay.
  */
 function stopAlarm(e) {
-    if (e) e.preventDefault(); // Extra safety
+    if (e) e.preventDefault();
     const overlay = document.getElementById('alarm-overlay');
     if (overlay) {
         overlay.classList.add('hidden');
-        alarmSound.pause();
-        alarmSound.currentTime = 0;
+        stopDigitalAlarm(); // Stop the digital beep
         addHistoryItem('Alarm Stopped', 'User acknowledged the event alarm.');
     }
 }
+
 
 /**
  * Calculates time remaining for an event.
@@ -77,23 +139,23 @@ function getTimeRemaining(eventDateString) {
 function renderEvents() {
     const eventList = document.getElementById('event-list');
     if (!eventList) return;
-    
+
     eventList.innerHTML = '';
     // Sort events by date and time, upcoming first
     events.sort((a, b) => {
         const dateA = new Date(a.date).getTime();
         const dateB = new Date(b.date).getTime();
-        
+
         if (isNaN(dateA)) return 1;
         if (isNaN(dateB)) return -1;
-        
+
         return dateA - dateB;
     });
 
     events.forEach(event => {
         const li = document.createElement('li');
         li.dataset.id = event.id;
-        
+
         const displayDate = new Date(event.date).toLocaleString('en-US', {
             month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
         });
@@ -130,7 +192,7 @@ function updateAllCountdowns() {
         } else {
             countdownSpan.textContent = 'Happening Now!';
             countdownSpan.style.color = '#ff4757';
-            
+
             // Trigger Alarm if not already notified
             if (!notifiedEvents.has(eventId)) {
                 const event = events.find(e => e.id === eventId);
@@ -237,11 +299,11 @@ function initEvents(loadedEvents) {
 
         initAlarmListeners(); // Initialize the Stop button
         setupEventListeners(); // Initialize other listeners
-        
+
         if (Array.isArray(loadedEvents)) {
             events = loadedEvents;
         }
-        
+
         const now = new Date().getTime();
         events.forEach(e => {
             const eventTime = new Date(e.date).getTime();
@@ -249,7 +311,7 @@ function initEvents(loadedEvents) {
                 notifiedEvents.add(e.id);
             }
         });
-        
+
         renderEvents();
     } catch (error) {
         console.error("Error initializing Event Module:", error);

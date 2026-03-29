@@ -28,15 +28,15 @@ function addHistoryItem(action, details) {
         action: action,
         details: details
     };
-    
+
     // Add to the beginning of the array (most recent first)
     historyItems.unshift(newItem);
-    
+
     // Keep only the last 50 items to avoid excessive storage use
     if (historyItems.length > 50) {
         historyItems.pop();
     }
-    
+
     saveData('history', historyItems);
     renderHistory();
 }
@@ -47,9 +47,9 @@ function addHistoryItem(action, details) {
 function renderHistory() {
     const historyList = document.getElementById('history-list');
     if (!historyList) return;
-    
+
     historyList.innerHTML = '';
-    
+
     if (!Array.isArray(historyItems) || historyItems.length === 0) {
         const emptyMsg = document.createElement('li');
         emptyMsg.className = 'history-empty';
@@ -57,7 +57,7 @@ function renderHistory() {
         historyList.appendChild(emptyMsg);
         return;
     }
-    
+
     historyItems.forEach(item => {
         const li = document.createElement('li');
         li.className = 'history-item';
